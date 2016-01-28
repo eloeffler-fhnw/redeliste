@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Balancierte Rednerliste</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.3/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <script src="semantic/dist/semantic.min.js"></script>
+    <style type="text/css">
+        .body {
+            width: 90%;
+            padding-top: 100px;
+            margin: 0 auto;
+        }
+        
+        body {
+            background-color: #ecf0f1;
+        }
+        
+        .button-success,
+        .button-error,
+        .button-warning,
+        .button-secondary {
+            color: white;
+        }
+        
+        .button-success {
+            background: rgb(28, 184, 65);
+            /* this is a green */
+        }
+        
+        .button-error {
+            background: rgb(202, 60, 60);
+            /* this is a maroon */
+        }
+        
+        .button-warning {
+            background: rgb(223, 117, 20);
+            /* this is an orange */
+        }
+        
+        .button-secondary {
+            background: rgb(66, 184, 221);
+            /* this is a light blue */
+        }
+        
+        h1 {
+            font-weight: 300;
+        }
+        
+        .ui.menu .item:before {
+            background: rgba(34, 36, 38, .0);
+        }
+        
+        .title {
+            font-size: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ui top fixed menu">
+        <div class="item">
+            <img style="width: 150px;" src="/img/fs-logo.png">
+        </div>
+        <p class="item title">> Balancierte Rednerliste</p>
+
+    </div>
+
+    <p></p>
+    <p></p>
+
+    <div class="body" ng-app>
+        <div ng-controller="SpeakersList">
+            <div class="ui grid">
+                <div class="eight wide column">
+                    <div class="ui raised segment">
+                        <h1>Redner</h1>
+                        <table class="ui small celled teal table">
+                            <thead>
+                                <tr>
+                                    <!--<th><b>ID</b></th>-->
+                                    <th><b>Redner</b></th>
+                                    <th><b>Beiträge</b></th>
+                                    <!--<td><b>Time</b></th>-->
+                                    <th><b>Meldung</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="speaker in speakers | orderBy:'text'">
+                                    <!--<td>{{speaker.id}}</td>-->
+                                    <td>{{speaker.text}}</td>
+                                    <td>{{speaker.inputs}}</td>
+                                    <!--<td>{{speaker.time}}</td>-->
+                                    <td>
+                                        <button class="mini ui button" ng-class="{true: 'primary'}[speaker.request]" ng-click="toggleRequest(speaker)">Meldung</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+
+                                    <th>
+                                        <form class="ui form" ng-submit="addSpeaker()">
+                                            <div class="ui action input">
+                                                <input type="text" ng-model="speakerName" placeholder="">
+                                                <button class="ui icon button" type="submit" value="add">
+                                                    <i class="add user icon"></i>
+                                                </button>
+                                        </form>
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+
+
+                        </div>
+                    </div>
+
+                    <div class="eight wide column">
+                        <div class="ui raised segment">
+                            <h1>Nächste Redner</h1>
+                            <table class="ui small celled teal table">
+                                <thead>
+                                    <tr>
+
+
+                                        <th><b>Redner</b></th>
+                                        <th><b>Beiträge</b></th>
+                                        <!--<th><b>Time</b></th>-->
+                                        <th><b>Meldung</b></th>
+                                        <th><b>Beitrag</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="speaker in speakers | filter:{request:true} | orderBy:['inputs','time']">
+
+
+                                        <td>{{speaker.text}}</td>
+                                        <td>{{speaker.inputs}}</td>
+                                        <!--<td>{{speaker.time}}</td>-->
+                                        <td>
+                                            <button class="mini ui button" ng-class="{true: 'primary'}[speaker.request]" ng-click="toggleRequest(speaker)">Meldung</button>
+                                        </td>
+                                        <td>
+                                            <button ng-click="didInput(speaker)" class="mini ui green button">+1</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function SpeakersList($scope) {
+                $scope.speakers = [];
+                $scope.addSpeaker = function() {
+                    if ($scope.speakerName) {
+                        $scope.speakers.push({
+                            text: $scope.speakerName,
+                            id: $scope.speakers.length + 1,
+                            inputs: 0,
+                            request: 0,
+                            time: ""
+                        });
+                        $scope.speakerName = '';
+                    };
+                };
+                $scope.toggleRequest = function(speaker) {
+                    if (speaker.request) {
+                        speaker.request = !speaker.request;
+                        speaker.time = 0;
+                    } else {
+                        speaker.request = !speaker.request;
+                        speaker.time = Date.now();
+                    }
+                }
+                $scope.didInput = function(speaker) {
+                    if (speaker.request) {
+                        speaker.request = !speaker.request;
+                        speaker.time = 0;
+                        speaker.inputs = speaker.inputs + 1;
+                    } else {
+                        speaker.request = !speaker.request;
+                        speaker.time = 0;
+                        speaker.inputs = speaker.inputs + 1;
+                    }
+
+                }
+            };
+        </script>
+</body>
+
+</html>
