@@ -12,46 +12,46 @@
             padding-top: 100px;
             margin: 0 auto;
         }
-        
+
         body {
             background-color: #ecf0f1;
         }
-        
+
         .button-success,
         .button-error,
         .button-warning,
         .button-secondary {
             color: white;
         }
-        
+
         .button-success {
             background: rgb(28, 184, 65);
             /* this is a green */
         }
-        
+
         .button-error {
             background: rgb(202, 60, 60);
             /* this is a maroon */
         }
-        
+
         .button-warning {
             background: rgb(223, 117, 20);
             /* this is an orange */
         }
-        
+
         .button-secondary {
             background: rgb(66, 184, 221);
             /* this is a light blue */
         }
-        
+
         h1 {
             font-weight: 300;
         }
-        
+
         .ui.menu .item:before {
             background: rgba(34, 36, 38, .0);
         }
-        
+
         .title {
             font-size: 25px;
         }
@@ -76,7 +76,7 @@
             <div class="ui grid">
                 <div class="eight wide column">
                     <div class="ui raised segment">
-                        <h1>Redner</h1>
+                        <h1>Teilnehmer</h1>
                         <table class="ui small celled teal table">
                             <thead>
                                 <tr>
@@ -110,7 +110,9 @@
                                                 </button>
                                         </form>
                                     </th>
-                                    <th></th>
+                                    <th>
+                                      <button class="mini ui button" ng-click="resetInputs()">Reset</button>
+                                    </th>
                                     <th></th>
                                 </tr>
                             </tfoot>
@@ -172,6 +174,11 @@
                         });
                         $scope.speakerName = '';
                     };
+                };
+                $scope.resetInputs = function() {
+                	for (var i = $scope.speakers.length - 1; i >= 0; i--) {
+                		$scope.speakers[i].inputs = 0;
+                	}
                 };
                 $scope.toggleRequest = function(speaker) {
                     if (speaker.request) {
